@@ -1,0 +1,63 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include "recipe.h"
+
+void recipe_new(
+    struct recipe *new_recipe,
+    int id,
+    const char *name,
+    const char *desc,
+    const char *categories,
+    const char *profile)
+{
+    map_init(&new_recipe->ingredients);
+    set_id(new_recipe, id);
+    set_name(new_recipe, name);
+    set_description(new_recipe, desc);
+    set_categories(new_recipe, categories);
+    set_profile(new_recipe, profile);
+}
+void set_id(struct recipe *rec, int id)
+{
+    rec->id = id;
+}
+void set_name(struct recipe *rec, const char *name)
+{
+    rec->name = name;
+}
+void set_description(struct recipe *rec, const char *desc)
+{
+    rec->description = desc;
+}
+void set_categories(struct recipe *rec, const char *categories)
+{
+    rec->categories = categories;
+}
+void set_profile(struct recipe *rec, const char *profile)
+{
+    rec->profile = profile;
+}
+void add_ingredient(struct recipe *rec, const char *new_ingredient, int percentage)
+{
+    map_set(&rec->ingredients, new_ingredient, percentage);
+}
+
+void delete_recipe(struct recipe *rec)
+{
+    map_deinit(&rec->ingredients);
+}
+
+void print_recipe(struct recipe *rec)
+{
+    printf("Trying to print recipe...");
+    printf("%s\n", rec->name);
+    printf("%s\n", rec->description);
+    printf("Categories: %s\n", rec->categories);
+    printf("Profile: %s\n", rec->profile);
+    const char *key;
+    map_iter_t iter = map_iter(&rec->ingredients);
+    while (key = map_next(&rec->ingredients, &iter))
+    {
+        printf("%s -> %d\n", key, *map_get(&rec->ingredients, key));
+    }
+}
