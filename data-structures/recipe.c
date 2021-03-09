@@ -50,14 +50,14 @@ void delete_recipe(struct recipe *rec)
 void print_recipe(struct recipe *rec)
 {
     printf("Trying to print recipe...");
-    printf("%d\n", rec->name);
-    printf("%d\n", rec->description);
-    printf("Categories: %d\n", rec->categories);
-    printf("Profile: %d\n", rec->profile);
+    printf("%s\n", rec->name);
+    printf("%s\n", rec->description);
+    printf("Categories: %s\n", rec->categories);
+    printf("Profile: %s\n", rec->profile);
     const char *key;
     map_iter_t iter = map_iter(&rec->ingredients);
     while (key = map_next(&rec->ingredients, &iter))
     {
-        printf("%s -> %d", key, *map_get(&rec->ingredients, key));
+        printf("%s -> %d\n", key, *map_get(&rec->ingredients, key));
     }
 }
