@@ -8,7 +8,8 @@ void recipe_new(
     const char *name,
     const char *desc,
     const char *categories,
-    const char *profile)
+    const char *profile
+)
 {
     map_init(&new_recipe->ingredients);
     set_id(new_recipe, id);
