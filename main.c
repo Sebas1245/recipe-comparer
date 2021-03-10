@@ -35,7 +35,7 @@ double calculate_euclidean_distance(map_int_t *ingredient_map_1, map_int_t *ingr
     {
         printf("%s -> %d\n", key, *map_get(&comparison_map, key));
         sum += pow(*map_get(&comparison_map, key), 2);
-        printf("Sum = %d\n", sum);
+        printf("Sum = %f\n", sum);
     }
     map_deinit(&comparison_map);
     return sqrt(sum);
@@ -69,6 +69,6 @@ int main(int argc, char const *argv[])
     {
         map_set(&map2, ingredients2[i], percentages2[i]);
     }
-    printf("distance = %d", calculate_euclidean_distance(&map1, &map2));
+    printf("distance = %f", calculate_euclidean_distance(&map1, &map2));
     return 0;
 }

@@ -4,7 +4,7 @@ SRC =  ./data-structures/map-master/src/map.c ./data-structures/recipe.c main.c
 OBJ = $(SRC:.cpp = .o)
 
 RecipeComparer: $(OBJ)
-	$(CC) $(CFLAGS) -o RecipeComparer $(OBJ)
+	$(CC) $(CFLAGS) -o RecipeComparer $(OBJ) -lm
 
 clean:
 	rm -f core *.o
