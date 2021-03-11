@@ -4,8 +4,7 @@
 
 
 
-
-recipe_new* fileReader() {
+void fileReader() {
     FILE * fp;
     char * line = NULL;
     size_t len = 0;
@@ -17,26 +16,29 @@ recipe_new* fileReader() {
     char * categories;
     char * profile;
 
+    int ingredients = 0;
+
     fp = fopen("./recepies.txt", "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
+    
+    struct recipe rec1;
 
     while ((read = getline(&line, &len, fp)) != -1) {
         printf("Retrieved line of length %zu:\n", read);
         printf("%s", line);
 
-        if (strcmp(line, "\n") == 0) {
+        if (line[0] == '\n') {
+            recipe_new(&rec1, 0, recipe, description, categories, profile);
+            print_recipe(&rec1);
             continue;
         }
         if (strcmp(line, "Ingredients") == 0) {
+            ingredients = 1;
             continue;
         }
 
-
-
-        
 	    char delim[] = ":";
-
 	    char *ptr = strtok(line, delim);
 
 	    if(ptr != NULL)
@@ -59,6 +61,13 @@ recipe_new* fileReader() {
                 ptr = strtok("\n", delim);
                 profile = ptr;
             }  
+
+            if (ingredients == 1) {
+                 char *perecentage  = strtok("\n", delim);
+
+                 int per = atoi(perecentage);
+                 add_ingredient(&rec1, ptr, per);
+            }
 	    }
 
     }
