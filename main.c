@@ -1,6 +1,22 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 #include "./data-structures/recipe.h"
+
+int isBlankLine (const char *line)
+{
+  int isBlank = 1;
+  for (const char *ch = (char*) line; *ch != '\0'; ++ch)
+  {
+    if (!isspace(*ch))
+    {
+      isBlank = 0;
+      break;
+    }
+  }
+
+  return isBlank;
+}
 
 void fileReader()
 {
@@ -23,7 +39,7 @@ void fileReader()
         printf("Retrieved line of length %zu:\n", read);
         printf("%s", line);
 
-        if (line[0] == '\n')
+        if (isBlankLine(line) == 1)
         {
             ingredients = 0;
             print_recipe(&rec1[index]);
@@ -91,7 +107,7 @@ void fileReader()
                 perecentage[strlen(perecentage) - 1] = 0;
                 int per = atoi(perecentage);
                 printf("%d\n", per);
-                //add_ingredient(&rec1[index], ptr, per);
+                add_ingredient(&rec1[index], ptr, per);
             }
         }
     }

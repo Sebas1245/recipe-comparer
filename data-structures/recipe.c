@@ -55,9 +55,9 @@ void print_recipe(struct recipe *rec)
     printf("%s", rec->description);
     printf("Categories: %s", rec->categories);
     printf("Profile: %s", rec->profile);
-    char *key;
+    const char *key;
     map_iter_t iter = map_iter(&rec->ingredients);
-    while (key == map_next(&rec->ingredients, &iter))
+    while (key = map_next(&rec->ingredients, &iter))
     {
         printf("%s -> %d\n", key, *map_get(&rec->ingredients, key));
     }
