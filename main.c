@@ -2,11 +2,10 @@
 #include <stdio.h>
 #include "./data-structures/recipe.h"
 
-
-
-void fileReader() {
-    FILE* fp;
-    char* line = NULL;
+void fileReader()
+{
+    FILE *fp;
+    char *line = NULL;
     size_t len = 0;
     ssize_t read;
 
@@ -16,61 +15,85 @@ void fileReader() {
     fp = fopen("./recepies.txt", "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
-    
+
     struct recipe rec1[100];
 
-    while ((read = getline(&line, &len, fp)) != -1) {
+    while ((read = getline(&line, &len, fp)) != -1)
+    {
         printf("Retrieved line of length %zu:\n", read);
         printf("%s", line);
 
-        if (line[0] == '\n') {
+        if (line[0] == '\n')
+        {
+            ingredients = 0;
             print_recipe(&rec1[index]);
             index = index + 1;
             continue;
         }
 
-	    char delim[] = ":";
-	    char *ptr = strtok(line, delim);
+        char delim[] = ":";
+        char *ptr = strtok(line, delim);
 
-        if (strcmp(ptr, "Ingredients") == 0) {
+        if (strcmp(ptr, "Ingredients") == 0)
+        {
             ingredients = 1;
             continue;
         }
 
-	    if(ptr != NULL)
-	    {
-		    printf("%s\n", ptr);
+        if (ptr != NULL)
+        {
+            printf("%s\n", ptr);
 
-            if (strcmp(ptr, "Recipe") == 0) {
+            if (strcmp(ptr, "Recipe") == 0)
+            {
                 ptr = strtok(NULL, delim);
                 printf("%s\n", ptr);
+                if (!(rec1[index].name = malloc(strlen(ptr) + 1))) //+1 is to make room for the NULL char that terminates C strings
+                {
+                    break;
+                }
                 strcpy(rec1[index].name, ptr);
             }
-            if (strcmp(ptr, "Description") == 0) {
+            if (strcmp(ptr, "Description") == 0)
+            {
                 ptr = strtok(NULL, delim);
                 printf("%s\n", ptr);
-                strcpy(rec1[index].description,ptr);
-            } 
-            if (strcmp(ptr, "Categories") == 0) {
+                if (!(rec1[index].description = malloc(strlen(ptr) + 1))) //+1 is to make room for the NULL char that terminates C strings
+                {
+                    break;
+                }
+                strcpy(rec1[index].description, ptr);
+            }
+            if (strcmp(ptr, "Categories") == 0)
+            {
                 ptr = strtok(NULL, delim);
                 printf("%s\n", ptr);
-               strcpy(rec1[index].categories,ptr);
-            } 
-            if (strcmp(ptr, "Profile") == 0) {
+                if (!(rec1[index].categories = malloc(strlen(ptr) + 1))) //+1 is to make room for the NULL char that terminates C strings
+                {
+                    break;
+                }
+                strcpy(rec1[index].categories, ptr);
+            }
+            if (strcmp(ptr, "Profile") == 0)
+            {
                 ptr = strtok(NULL, delim);
                 printf("%s\n", ptr);
-                strcpy(rec1[index].profile,ptr);
-            }  
-            if (ingredients == 1) {
-                char *perecentage  = strtok(NULL, delim);
-               // perecentage[strlen(perecentage) - 1] = 0;
-               //  printf("%s", perecentage);
+                if (!(rec1[index].profile = malloc(strlen(ptr) + 1))) //+1 is to make room for the NULL char that terminates C strings
+                {
+                    break;
+                }
+                strcpy(rec1[index].profile, ptr);
+            }
+            if (ingredients == 1)
+            {
+                char *perecentage = strtok(NULL, delim);
+                // perecentage[strlen(perecentage) - 1] = 0;
+                //  printf("%s", perecentage);
                 //int per = atoi(perecentage);
                 //printf("%d\n", per);
                 // add_ingredient(&rec1, ptr, per);
             }
-	    }
-
+        }
     }
 }
 
