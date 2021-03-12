@@ -18,7 +18,7 @@ int isBlankLine (const char *line)
   return isBlank;
 }
 
-void fileReader()
+struct recipe * fileReader()
 {
     FILE *fp;
     char *line = NULL;
@@ -32,7 +32,7 @@ void fileReader()
     if (fp == NULL)
         exit(EXIT_FAILURE);
 
-    struct recipe rec1[100];
+    struct recipe * rec1 = malloc(sizeof(struct recipe) * 100);;
 
     while ((read = getline(&line, &len, fp)) != -1)
     {
@@ -111,12 +111,14 @@ void fileReader()
             }
         }
     }
+
+    return rec1;
 }
 
 int main(int argc, char const *argv[])
 {
-    struct recipe rec1;
-    fileReader();
+    struct recipe * rec1;
+    rec1 = fileReader();
     // recipe_new(&rec1, 0, "Recipe A", "This is a cocktail that includes...", "Digestive, Refresher", "Bitter");
     // int percentages[] = {50, 10, 10, 20, 10};
     // char *ingredients[] = {"Water", "Coffee", "Sugar", "Cream", "Baileys"};
@@ -124,7 +126,7 @@ int main(int argc, char const *argv[])
     // {
     //     add_ingredient(&rec1, ingredients[i], percentages[i]);
     // }
-    // print_recipe(&rec1);
+    print_recipe(&rec1[0]);
     // delete_recipe(&rec1);
     return 0;
 }
