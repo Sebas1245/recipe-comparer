@@ -86,12 +86,12 @@ void fileReader()
             }
             if (ingredients == 1)
             {
-                char *perecentage = strtok(NULL, delim);
-                // perecentage[strlen(perecentage) - 1] = 0;
-                //  printf("%s", perecentage);
-                //int per = atoi(perecentage);
-                //printf("%d\n", per);
-                // add_ingredient(&rec1, ptr, per);
+                char * perecentage = malloc(strlen(ptr) + 1);
+                perecentage = strtok(NULL, delim);
+                perecentage[strlen(perecentage) - 1] = 0;
+                int per = atoi(perecentage);
+                printf("%d\n", per);
+                //add_ingredient(&rec1[index], ptr, per);
             }
         }
     }
