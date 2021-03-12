@@ -2,7 +2,7 @@ Recipe:Recipe A
 Description:This is a cocktail that includes ....
 Categories:Digestive
 Profile:Bitter
-Ingredients
+Ingredients:
 Water:50
 Coffee:10
 Sugar:10

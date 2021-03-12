@@ -5,68 +5,69 @@
 
 
 void fileReader() {
-    FILE * fp;
-    char * line = NULL;
+    FILE* fp;
+    char* line = NULL;
     size_t len = 0;
     ssize_t read;
 
-
-    char * recipe;
-    char * description;
-    char * categories;
-    char * profile;
-
+    int index = 0;
     int ingredients = 0;
 
     fp = fopen("./recepies.txt", "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
     
-    struct recipe rec1;
+    struct recipe rec1[100];
 
     while ((read = getline(&line, &len, fp)) != -1) {
         printf("Retrieved line of length %zu:\n", read);
         printf("%s", line);
 
         if (line[0] == '\n') {
-            recipe_new(&rec1, 0, recipe, description, categories, profile);
-            print_recipe(&rec1);
-            continue;
-        }
-        if (strcmp(line, "Ingredients") == 0) {
-            ingredients = 1;
+            print_recipe(&rec1[index]);
+            index = index + 1;
             continue;
         }
 
 	    char delim[] = ":";
 	    char *ptr = strtok(line, delim);
 
+        if (strcmp(ptr, "Ingredients") == 0) {
+            ingredients = 1;
+            continue;
+        }
+
 	    if(ptr != NULL)
 	    {
-		    printf("'%s'\n", ptr);
-		    ptr = strtok(NULL, delim);
+		    printf("%s\n", ptr);
+
             if (strcmp(ptr, "Recipe") == 0) {
-                ptr = strtok("\n", delim);
-                recipe = ptr;
+                ptr = strtok(NULL, delim);
+                printf("%s\n", ptr);
+                strcpy(rec1[index].name, ptr);
             }
             if (strcmp(ptr, "Description") == 0) {
-                ptr = strtok("\n", delim);
-                description = ptr;
+                ptr = strtok(NULL, delim);
+                printf("%s\n", ptr);
+                strcpy(rec1[index].description,ptr);
             } 
             if (strcmp(ptr, "Categories") == 0) {
-                ptr = strtok("\n", delim);
-                categories = ptr;
+                ptr = strtok(NULL, delim);
+                printf("%s\n", ptr);
+               strcpy(rec1[index].categories,ptr);
             } 
             if (strcmp(ptr, "Profile") == 0) {
-                ptr = strtok("\n", delim);
-                profile = ptr;
+                ptr = strtok(NULL, delim);
+                printf("%s\n", ptr);
+                strcpy(rec1[index].profile,ptr);
             }  
-
             if (ingredients == 1) {
-                 char *perecentage  = strtok("\n", delim);
-
-                 int per = atoi(perecentage);
-                 add_ingredient(&rec1, ptr, per);
+                char *perecentage  = strtok(NULL, delim);
+               // perecentage[strlen(perecentage) - 1] = 0;
+               //  printf("%s", perecentage);
+                //int per = atoi(perecentage);
+                //printf("%d\n", per);
+                // add_ingredient(&rec1, ptr, per);
             }
 	    }
 
@@ -76,14 +77,15 @@ void fileReader() {
 int main(int argc, char const *argv[])
 {
     struct recipe rec1;
-    recipe_new(&rec1, 0, "Recipe A", "This is a cocktail that includes...", "Digestive, Refresher", "Bitter");
-    int percentages[] = {50, 10, 10, 20, 10};
-    char *ingredients[] = {"Water", "Coffee", "Sugar", "Cream", "Baileys"};
-    for (int i = 0; i < sizeof(percentages)/sizeof(*percentages); i++)
-    {
-        add_ingredient(&rec1, ingredients[i], percentages[i]);
-    }
-    print_recipe(&rec1);
-    delete_recipe(&rec1);
+    fileReader();
+    // recipe_new(&rec1, 0, "Recipe A", "This is a cocktail that includes...", "Digestive, Refresher", "Bitter");
+    // int percentages[] = {50, 10, 10, 20, 10};
+    // char *ingredients[] = {"Water", "Coffee", "Sugar", "Cream", "Baileys"};
+    // for (int i = 0; i < sizeof(percentages)/sizeof(*percentages); i++)
+    // {
+    //     add_ingredient(&rec1, ingredients[i], percentages[i]);
+    // }
+    // print_recipe(&rec1);
+    // delete_recipe(&rec1);
     return 0;
 }

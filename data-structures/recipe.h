@@ -7,21 +7,21 @@
 
 struct recipe {
   int id;
-  const char *name;
-  const char *description;
-  const char *categories;
-  const char *profile;
+  char *name;
+  char *description;
+  char *categories;
+  char *profile;
   map_int_t ingredients;
 };
 
-void recipe_new(struct recipe *new_recipe, int id, const char *name,
-                const char *desc, const char *categories, const char *profile);
+void recipe_new(struct recipe *new_recipe, int id, char *name,
+                char *desc, char *categories, char *profile);
 void set_id(struct recipe *rec, int id);
-void set_name(struct recipe *rec, const char *name);
-void set_description(struct recipe *rec, const char *desc);
-void set_categories(struct recipe *rec, const char *categories);
-void set_profile(struct recipe *rec, const char *profile);
-void add_ingredient(struct recipe *rec, const char *new_ingredient_name,
+void set_name(struct recipe *rec, char *name);
+void set_description(struct recipe *rec, char *desc);
+void set_categories(struct recipe *rec, char *categories);
+void set_profile(struct recipe *rec, char *profile);
+void add_ingredient(struct recipe *rec, char *new_ingredient_name,
                     int percentage);
 void delete_recipe(struct recipe *rec);
 void print_recipe(struct recipe *rec);
