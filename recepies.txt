@@ -1,0 +1,32 @@
+Recipe:Recipe A
+Description:This is a cocktail that includes ....
+Categories:Digestive
+Profile:Bitter
+Ingredients:
+Water:50
+Coffee:10
+Sugar:10
+Cream:20
+Bayleys:10
+
+Recipe:Recipe B
+Description:This is a cocktail that...
+Categories:Refresher
+Profile:Citric
+Ingredients:
+Water:50
+Vodka:20O
+range:10
+Lime:15
+Ginger:5
+
+Recipe:Recipe C
+Description:This is a cocktail that...
+Categories:Refresher
+Profile:Sweet
+Ingredients:
+Water:70
+Syrup:10
+Strawberry:10
+Raspberry:10
+
