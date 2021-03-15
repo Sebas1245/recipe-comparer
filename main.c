@@ -42,7 +42,7 @@ struct recipe *fileReader(int* n)
     FILE *fp;
     char *line = NULL;
     size_t len = 0;
-    ssize_t read;
+    size_t read;
 
     int index = 0;
     int ingredients = 0;
@@ -216,6 +216,33 @@ double calculate_euclidean_distance(map_int_t *ingredient_map_1, map_int_t *ingr
     return sqrt(sum);
 }
 
+
+void printGraph(int iNum, struct edge** adjMat){
+    FILE *ptr;
+    ptr = fopen("graph.gv", "w");
+    if(ptr == NULL) {
+        printf("Erro al abrir archivo de visualización\n");
+        return; 
+    }
+
+    fputs("graph G {\n", ptr);
+
+    for(int i = 0; i < iNum; i++){
+        for(int j = 0; j <iNum; j++){
+            if(i < j && i != j && adjMat[i][j].weight != 0){
+                #ifdef DEBUG
+                printf("%s %s %f\n", adjMat[i][j].source, adjMat[i][j].dest, adjMat[i][j].weight);
+                #endif
+                fprintf(ptr, " \" %s \" -- \" %s \" [label = \" %f \"  fontsize = 10.0 color = blue]; \n", adjMat[i][j].source, adjMat[i][j].dest, adjMat[i][j].weight);
+            }
+        }
+    }
+
+    fputs("}", ptr);
+    printf("Corra el comando: dot -Tpng graph.gv -o graph.png y Abra el archivo graph.png\n");
+    fclose(ptr);
+}
+
 int main(int argc, char const *argv[])
 {
     int n = 0;
@@ -238,6 +265,8 @@ int main(int argc, char const *argv[])
                     &rec1[i].ingredients, &rec1[j].ingredients));
         }
     }
+
+    printGraph(n, adjMat);
 
     #ifdef DEBUG
     for (int i = 0; i < n; i++) {

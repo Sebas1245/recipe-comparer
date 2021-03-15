@@ -16,3 +16,15 @@ main.exe
 ```
 
 On Linux, you may run `make` or `make debug` and this will automatically compile the project according to instructions on [Makefile](Makefile).
+
+## Visualization Tool
+On this project the vizualization tool GraphViz was used to create an undirected and weighted graph to show the similarities of the recipes. 
+In order for the visualization tool to work, GraphViz needs to be install. On Windows install the tool [here](https://graphviz.org/download/). On Linux run the following: 
+
+```
+sudo apt install graphviz
+```
+After running the main program, run the following command to generate the png file containing the graph:
+```
+dot -Tpng graph.gv -o graph.png
+```
