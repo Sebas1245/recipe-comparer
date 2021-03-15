@@ -3,6 +3,24 @@
 #include <math.h>
 #include <ctype.h>
 #include "./data-structures/recipe.h"
+#include "./data-structures/edge.h"
+
+char* trimWhitespace(char *str)
+{
+    char *end;
+    
+    // Leading whitespace
+    while(isspace(*str)) str++;
+    
+    if(*str == 0) return str;
+
+    // Trailing space
+    end = str + strlen(str) - 1;
+    while(end > str && isspace(*end)) end--;
+
+    end[1] = '\0';
+    return str;
+}
 
 int isBlankLine(const char *line)
 {
@@ -19,7 +37,7 @@ int isBlankLine(const char *line)
     return isBlank;
 }
 
-struct recipe *fileReader()
+struct recipe *fileReader(int* n)
 {
     FILE *fp;
     char *line = NULL;
@@ -28,23 +46,40 @@ struct recipe *fileReader()
 
     int index = 0;
     int ingredients = 0;
+    int sumOfIngredients = 0;
 
     fp = fopen("./recepies.txt", "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
 
     struct recipe *rec1 = malloc(sizeof(struct recipe) * 100);
-    ;
 
     while ((read = getline(&line, &len, fp)) != -1)
     {
+        #ifdef DEBUG
         printf("Retrieved line of length %zu:\n", read);
         printf("%s", line);
+        #endif
 
         if (isBlankLine(line) == 1)
         {
-            ingredients = 0;
+            if (sumOfIngredients != 100) {
+                printf("Bad recipe format (Recipe: %s), discarding...\n", rec1[index].name);
+                ingredients = 0;
+                sumOfIngredients = 0;
+                strcpy(rec1[index].name, "");
+                strcpy(rec1[index].categories, "");
+                strcpy(rec1[index].description, "");
+                strcpy(rec1[index].profile, "");
+                map_init(&rec1[index].ingredients);
+                continue;
+            }
+            #ifdef DEBUG
             print_recipe(&rec1[index]);
+            #endif
+            ingredients = 0;
+            sumOfIngredients = 0;
+            rec1[index].id = index;
             index = index + 1;
             continue;
         }
@@ -60,47 +95,61 @@ struct recipe *fileReader()
 
         if (ptr != NULL)
         {
+            #ifdef DEBUG
             printf("%s\n", ptr);
+            #endif
 
             if (strcmp(ptr, "Recipe") == 0)
             {
                 ptr = strtok(NULL, delim);
+                #ifdef DEBUG
                 printf("%s\n", ptr);
+                #endif
                 if (!(rec1[index].name = malloc(strlen(ptr) + 1))) //+1 is to make room for the NULL char that terminates C strings
                 {
                     break;
                 }
                 strcpy(rec1[index].name, ptr);
+                rec1[index].name = trimWhitespace(rec1[index].name);
             }
             if (strcmp(ptr, "Description") == 0)
             {
                 ptr = strtok(NULL, delim);
+                #ifdef DEBUG
                 printf("%s\n", ptr);
+                #endif
                 if (!(rec1[index].description = malloc(strlen(ptr) + 1))) //+1 is to make room for the NULL char that terminates C strings
                 {
                     break;
                 }
                 strcpy(rec1[index].description, ptr);
+                rec1[index].description = trimWhitespace(rec1[index].description);
             }
             if (strcmp(ptr, "Categories") == 0)
             {
                 ptr = strtok(NULL, delim);
+                #ifdef DEBUG
                 printf("%s\n", ptr);
+                #endif
                 if (!(rec1[index].categories = malloc(strlen(ptr) + 1))) //+1 is to make room for the NULL char that terminates C strings
                 {
                     break;
                 }
                 strcpy(rec1[index].categories, ptr);
+                rec1[index].categories = trimWhitespace(rec1[index].categories);
             }
             if (strcmp(ptr, "Profile") == 0)
             {
                 ptr = strtok(NULL, delim);
+                #ifdef DEBUG
                 printf("%s\n", ptr);
+                #endif
                 if (!(rec1[index].profile = malloc(strlen(ptr) + 1))) //+1 is to make room for the NULL char that terminates C strings
                 {
                     break;
                 }
                 strcpy(rec1[index].profile, ptr);
+                rec1[index].profile = trimWhitespace(rec1[index].profile);
             }
             if (ingredients == 1)
             {
@@ -108,14 +157,19 @@ struct recipe *fileReader()
                 perecentage = strtok(NULL, delim);
                 perecentage[strlen(perecentage) - 1] = 0;
                 int per = atoi(perecentage);
-                printf("%d\n", per);
+                #ifdef DEBUG
+                printf("Adding (%s, %d)\n", ptr, per);
+                #endif
+                sumOfIngredients += per;
                 add_ingredient(&rec1[index], ptr, per);
             }
         }
     }
 
+    *n = index;
     return rec1;
 }
+
 double calculate_euclidean_distance(map_int_t *ingredient_map_1, map_int_t *ingredient_map_2)
 {
     double sum = 0;
@@ -127,12 +181,16 @@ double calculate_euclidean_distance(map_int_t *ingredient_map_1, map_int_t *ingr
     map_iter_t iter3 = map_iter(&comparison_map);
     while (key = map_next(ingredient_map_1, &iter1))
     {
+        #ifdef DEBUG
         printf("%s -> %d\n", key, *map_get(ingredient_map_1, key));
+        #endif
         map_set(&comparison_map, key, *map_get(ingredient_map_1, key));
     }
     while (key = map_next(ingredient_map_2, &iter2))
     {
+        #ifdef DEBUG
         printf("%s -> %d\n", key, *map_get(ingredient_map_2, key));
+        #endif
         int *current_value = map_get(&comparison_map, key), new_value;
         if (current_value != NULL)
         {
@@ -146,9 +204,13 @@ double calculate_euclidean_distance(map_int_t *ingredient_map_1, map_int_t *ingr
     }
     while (key = map_next(&comparison_map, &iter3))
     {
+        #ifdef DEBUG
         printf("%s -> %d\n", key, *map_get(&comparison_map, key));
+        #endif
         sum += pow(*map_get(&comparison_map, key), 2);
+        #ifdef DEBUG
         printf("Sum = %f\n", sum);
+        #endif
     }
     map_deinit(&comparison_map);
     return sqrt(sum);
@@ -156,44 +218,35 @@ double calculate_euclidean_distance(map_int_t *ingredient_map_1, map_int_t *ingr
 
 int main(int argc, char const *argv[])
 {
-    // struct recipe rec1;
-    // recipe_new(&rec1, 0, "Recipe A", "This is a cocktail that includes...", "Digestive, Refresher", "Bitter");
-    // int percentages[] = {50, 10, 10, 20, 10};
-    // char *ingredients[] = {"Water", "Coffee", "Sugar", "Cream", "Baileys"};
-    // for (int i = 0; i < sizeof(percentages) / sizeof(*percentages); i++)
-    // {
-    //     add_ingredient(&rec1, ingredients[i], percentages[i]);
-    // }
-    // print_recipe(&rec1);
-    // delete_recipe(&rec1);
-    map_int_t map1;
-    map_int_t map2;
-    map_init(&map1);
-    map_init(&map2);
-    char *ingredients1[] = {"leche", "cereal"};
-    char *ingredients2[] = {"leche", "cereal", "platano"};
-    int percentages1[] = {50, 50};
-    int percentages2[] = {45, 45, 10};
-    for (int i = 0; i < sizeof(percentages1) / sizeof(*percentages1); i++)
-    {
-        map_set(&map1, ingredients1[i], percentages1[i]);
-    }
-    for (int i = 0; i < sizeof(percentages2) / sizeof(*percentages2); i++)
-    {
-        map_set(&map2, ingredients2[i], percentages2[i]);
-    }
-    printf("distance = %f", calculate_euclidean_distance(&map1, &map2));
-
+    int n = 0;
     struct recipe *rec1;
-    rec1 = fileReader();
-    // recipe_new(&rec1, 0, "Recipe A", "This is a cocktail that includes...", "Digestive, Refresher", "Bitter");
-    // int percentages[] = {50, 10, 10, 20, 10};
-    // char *ingredients[] = {"Water", "Coffee", "Sugar", "Cream", "Baileys"};
-    // for (int i = 0; i < sizeof(percentages)/sizeof(*percentages); i++)
-    // {
-    //     add_ingredient(&rec1, ingredients[i], percentages[i]);
-    // }
-    print_recipe(&rec1[0]);
-    // delete_recipe(&rec1);
+    rec1 = fileReader(&n);
+
+    printf("No. of recipes: %d\n", n);
+    struct edge **adjMat = malloc(n * sizeof(struct edge*)); 
+    for (int i = 0; i < n; i++) {
+        adjMat[i] = malloc(n * sizeof(struct edge)); 
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            set_source(&adjMat[i][j], rec1[i].name);
+            set_dest(&adjMat[i][j], rec1[j].name);
+
+            set_weight(&adjMat[i][j], (i == j) ? 0 
+                : calculate_euclidean_distance(
+                    &rec1[i].ingredients, &rec1[j].ingredients));
+        }
+    }
+
+    #ifdef DEBUG
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            print_edge(&adjMat[i][j]);
+            printf("-------------\n");
+        }
+    }
+    #endif
+
     return 0;
 }
