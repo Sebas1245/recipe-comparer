@@ -229,11 +229,15 @@ void printGraph(int iNum, struct edge** adjMat){
 
     for(int i = 0; i < iNum; i++){
         for(int j = 0; j <iNum; j++){
-            if(i < j && i != j && adjMat[i][j].weight != 0){
+            if(i < j && i != j){
                 #ifdef DEBUG
                 printf("%s %s %f\n", adjMat[i][j].source, adjMat[i][j].dest, adjMat[i][j].weight);
                 #endif
-                fprintf(ptr, " \" %s \" -- \" %s \" [label = \" %f \"  fontsize = 10.0 color = blue]; \n", adjMat[i][j].source, adjMat[i][j].dest, adjMat[i][j].weight);
+                if(adjMat[i][j].weight == 0){
+                    fprintf(ptr, " \" %s \" -- \" %s \" [label = \" Misma receta. Dist = 0 \" fontsize = 10.0 color = blue]; \n", adjMat[i][j].source, adjMat[i][j].dest);
+                }else{
+                    fprintf(ptr, " \" %s \" -- \" %s \" [label = \" %f \"  fontsize = 10.0 color = grey]; \n", adjMat[i][j].source, adjMat[i][j].dest, adjMat[i][j].weight);
+                }
             }
         }
     }
