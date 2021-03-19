@@ -8,18 +8,11 @@ This project uses a map implementation which can be found [here](https://github.
 
 ## Compilation
 
-To compile and run this project on Windows, enter the following on the terminal **(this will change as the project is updated)**:
-
-```
-gcc main.c .\data-structures\recipe.c .\data-structures\map-master\src\map.c -o main.exe
-main.exe
-```
-
-On Linux, you may run `make` or `make debug` and this will automatically compile the project according to instructions on [Makefile](Makefile).
+This project was designed to be compiled on Linux. Run `make` or `make debug` and this will automatically compile the project according to instructions on [Makefile](Makefile).
 
 ## Visualization Tool
 On this project the vizualization tool GraphViz was used to create an undirected and weighted graph to show the similarities of the recipes. 
-In order for the visualization tool to work, GraphViz needs to be install. On Windows install the tool [here](https://graphviz.org/download/). On Linux run the following: 
+In order for the visualization tool to work, GraphViz needs to be installed. To install this tool, run the following: 
 
 ```
 sudo apt install graphviz
@@ -28,3 +21,11 @@ After running the main program, run the following command to generate the png fi
 ```
 dot -Tpng graph.gv -o graph.png
 ```
+## Example input
+An example of the input file can be found in [recepies.txt](recepies.txt)
+
+## Example output 
+An example of the output of running the project with the example input would be the file generated as [graph.gv](graph.gv)
+
+By running the required command, the following image is generated: 
+![](graph.png)

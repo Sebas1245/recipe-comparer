@@ -1,0 +1,7 @@
+graph G {
+ " Recipe A " -- " Recipe B " [label = " 38.078866 "  fontsize = 10.0 color = blue]; 
+ " Recipe A " -- " Recipe C " [label = " 37.416574 "  fontsize = 10.0 color = blue]; 
+ " Recipe A " -- " Recipe D " [label = " 38.078866 "  fontsize = 10.0 color = blue]; 
+ " Recipe B " -- " Recipe C " [label = " 38.078866 "  fontsize = 10.0 color = blue]; 
+ " Recipe C " -- " Recipe D " [label = " 38.078866 "  fontsize = 10.0 color = blue]; 
+}
