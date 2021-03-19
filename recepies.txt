@@ -37,3 +37,14 @@ Syrup:10
 Strawberry:10
 Raspberry:10
 
+Recipe:Recipe D
+Description:This is a cocktail that...
+Categories:Refresher
+Profile:Citric
+Ingredients:
+Water:50
+Vodka:20O
+range:10
+Lime:15
+Ginger:5
+
