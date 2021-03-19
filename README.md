@@ -6,9 +6,13 @@ C project that takes in text files with recipe descriptions and outputs a graph 
 
 This project uses a map implementation which can be found [here](https://github.com/rxi/map).
 
-## Compilation
+## Compilation and Execution
 
 This project was designed to be compiled on Linux. Run `make` or `make debug` and this will automatically compile the project according to instructions on [Makefile](Makefile).
+This then generates the compiled file as `RecipeComparer.o `. To execute the file, run: 
+```
+./RecipeComparer.o
+```
 
 ## Visualization Tool
 On this project the vizualization tool GraphViz was used to create an undirected and weighted graph to show the similarities of the recipes. 
